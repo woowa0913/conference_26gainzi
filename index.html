@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[가인지 컨퍼런스] 경량 조직의 시대, 진짜 일을 하다 - 디지털 상세 보고서</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js for interactive state management -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Noto Sans KR Web Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans KR', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f5ff',
+                            100: '#e0ebff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        },
+                        accent: {
+                            indigo: '#6366f1',
+                            emerald: '#10b981',
+                            rose: '#f43f5e',
+                            amber: '#f59e0b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .prose-custom p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-100 selection:text-brand-900" x-data="{ 
+    activeTab: 'summary', 
+    mobileMenuOpen: false,
+    checkedQuestions: {},
+    checkedActions: {},
+    toastMessage: '',
+    showToast(msg) {
+        this.toastMessage = msg;
+        setTimeout(() => { this.toastMessage = '' }, 3000);
+    },
+    copyToClipboard(text) {
+        const tempElem = document.createElement('textarea');
+        tempElem.value = text;
+        document.body.appendChild(tempElem);
+        tempElem.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempElem);
+        this.showToast('클립보드에 주소가 복사되었습니다!');
+    }
+}">
+
+    <!-- Toast Notification -->
+    <div x-show="toastMessage" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 translate-y-2"
+         class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-2 border border-slate-700" 
+         x-cloak>
+        <span class="text-accent-emerald"><i class="fas fa-check-circle"></i></span>
+        <span class="text-sm font-medium" x-text="toastMessage"></span>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 lg:px-8 py-4 shadow-sm">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="bg-gradient-to-tr from-brand-600 to-accent-indigo text-white p-2.5 rounded-xl shadow-lg shadow-brand-500/20">
+                    <i class="fa-solid fa-network-wired text-lg"></i>
+                </span>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-slate-900">가인지 컨퍼런스 2026</h1>
+                    <p class="text-xs text-slate-500 font-medium">경량 조직의 시대, 진짜 일을 하다</p>
+                </div>
+            </div>
+
+            <!-- Meta Information Badge Grid (Desktop) -->
+            <div class="hidden md:flex items-center gap-3 text-xs font-medium text-slate-600">
+                <span class="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-full">
+                    <i class="fa-regular fa-calendar text-brand-600"></i> 2026. 05. 29 (금)
+                </span>
+                <span class="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-full">
+                    <i class="fa-regular fa-user text-accent-indigo"></i> kt cloud 박상우 (인재육성TF)
+                </span>
+                <button @click="copyToClipboard(window.location.href)" class="flex items-center gap-1.5 bg-brand-50 text-brand-600 hover:bg-brand-100 transition px-3 py-1.5 rounded-full font-semibold">
+                    <i class="fa-regular fa-share-from-square"></i> 보고서 공유
+                </button>
+            </div>
+
+            <!-- Mobile Drawer Button -->
+            <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden flex p-2 rounded-lg hover:bg-slate-100 transition text-slate-600 focus:outline-none">
+                <i class="fa-solid" :class="mobileMenuOpen ? 'fa-xmark text-xl' : 'fa-bars text-xl'"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Content Canvas Structure -->
+    <div class="max-w-7xl mx-auto min-h-[calc(100vh-80px)] flex flex-col md:flex-row relative">
+        
+        <!-- Sidebar Navigation Drawer -->
+        <aside class="w-full md:w-80 p-4 lg:p-6 shrink-0 md:sticky md:top-[80px] md:h-[calc(100vh-80px)] overflow-y-auto border-r border-slate-200 bg-white"
+               :class="{'hidden md:block': !mobileMenuOpen, 'block': mobileMenuOpen}">
+            
+            <div class="space-y-6">
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2.5">대시보드</span>
+                    <nav class="space-y-1">
+                        <button @click="activeTab = 'summary'; mobileMenuOpen = false" 
+                                :class="activeTab === 'summary' ? 'bg-brand-50 text-brand-700 font-bold border-l-4 border-brand-600' : 'text-slate-600 hover:bg-slate-50 font-medium'"
+                                class="w-full flex items-center justify-between px-3.5 py-3 rounded-lg text-left transition duration-150">
+                            <span class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-rectangle-list text-brand-500"></i>
+                                <span class="text-sm">컨퍼런스 종합 요약</span>
+                            </span>
+                            <span class="text-[10px] bg-brand-100 text-brand-700 font-bold px-2 py-0.5 rounded-full">종합</span>
+                        </button>
+                    </nav>
+                </div>
+
+                <div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2.5">세션별 상세 리포트</span>
+                    <nav class="space-y-1">
+                        <!-- Session 1 -->
+                        <button @click="activeTab = 'session1'; mobileMenuOpen = false" 
+                                :class="activeTab === 'session1' ? 'bg-indigo-50 text-indigo-700 font-bold border-l-4 border-accent-indigo' : 'text-slate-600 hover:bg-slate-50 font-medium'"
+                                class="w-full flex items-center gap-2.5 px-3.5 py-3 rounded-lg text-left transition duration-150">
+                            <span class="w-5 h-5 rounded bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold shrink-0">1</span>
+                            <div class="truncate text-sm">
+                                <p class="text-[10px] text-slate-400 font-semibold leading-none">송길영 작가</p>
+                                <p class="truncate mt-1 text-slate-800">시대예보: 경량 문명</p>
+                            </div>
+                        </button>
+
+                        <!-- Session 2 -->
+                        <button @click="activeTab = 'session2'; mobileMenuOpen = false" 
+                                :class="activeTab === 'session2' ? 'bg-emerald-50 text-emerald-700 font-bold border-l-4 border-accent-emerald' : 'text-slate-600 hover:bg-slate-50 font-medium'"
+                                class="w-full flex items-center gap-2.5 px-3.5 py-3 rounded-lg text-left transition duration-150">
+                            <span class="w-5 h-5 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0">2</span>
+                            <div class="truncate text-sm">
+                                <p class="text-[10px] text-slate-400 font-semibold leading-none">서재민 본부장</p>
+                                <p class="truncate mt-1 text-slate-800">채용의 시대는 끝났다</p>
+                            </div>
+                        </button>
+
+                        <!-- Session 3 (Rose color) -->
+                        <button @click="activeTab = 'session3'; mobileMenuOpen = false" 
+                                :class="activeTab === 'session3' ? 'bg-rose-50 text-rose-700 font-bold border-l-4 border-accent-rose' : 'text-slate-600 hover:bg-slate-50 font-medium'"
+                                class="w-full flex items-center gap-2.5 px-3.5 py-3 rounded-lg text-left transition duration-150">
+                            <span class="w-5 h-5 rounded bg-rose-100 text-rose-700 flex items-center justify-center text-xs font-bold shrink-0">3</span>
+                            <div class="truncate text-sm">
+                                <p class="text-[10px] text-slate-400 font-semibold leading-none">이성파 공동대표</p>
+                                <p class="truncate mt-1 text-slate-800">생산성 올리는 AI 설계</p>
+                            </div>
+                        </button>
+
+                        <!-- Session 4 -->
+                        <button @click="activeTab = 'session4'; mobileMenuOpen = false" 
+                                :class="activeTab === 'session4' ? 'bg-amber-50 text-amber-700 font-bold border-l-4 border-accent-amber' : 'text-slate-600 hover:bg-slate-50 font-medium'"
+                                class="w-full flex items-center gap-2.5 px-3.5 py-3 rounded-lg text-left transition duration-150">
+                            <span class="w-5 h-5 rounded bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold shrink-0">4</span>
+                            <div class="truncate text-sm">
+                                <p class="text-[10px] text-slate-400 font-semibold leading-none">김경민 대표</p>
+                                <p class="truncate mt-1 text-slate-800">조직 운영 프레임워크</p>
+                            </div>
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Strategic Target Card -->
+                <div class="p-4 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 text-white space-y-3 shadow-xl">
+                    <p class="text-xs font-semibold text-brand-300"><i class="fa-solid fa-cloud mr-1"></i> kt cloud TF Focus</p>
+                    <p class="text-[11px] text-slate-300 leading-relaxed">
+                        본 보고서는 2026 가인지 컨퍼런스의 핵심 교훈인 <strong>고밀도 경량화</strong> 관점을 당사 인재육성, 조직문화, 채용 및 온보딩 체계에 정교하게 대입해 보기 위해 정리한 디지털 아카이브입니다.
+                    </p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Panel Content -->
+        <main class="flex-1 p-4 lg:p-8 overflow-x-hidden">
+            
+            <!-- SECTION 0: 컨퍼런스 종합 요약 -->
+            <div x-show="activeTab === 'summary'" x-transition:enter="transition duration-150 ease-out" class="space-y-8">
+                
+                <!-- Hero Banner Card (Restored to image_75cee2.png layout) -->
+                <div class="p-6 lg:p-8 rounded-3xl bg-brand-50/60 border border-brand-100/50 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 shadow-sm">
+                    <div class="space-y-4 flex-1">
+                        <span class="inline-flex items-center gap-1.5 bg-brand-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                            COMPREHENSIVE SUMMARY
+                        </span>
+                        <h2 class="text-2xl lg:text-3xl font-extrabold text-slate-900 leading-tight">
+                            경량 조직의 시대, 진짜 일을 하다
+                        </h2>
+                        <p class="text-slate-600 text-sm max-w-xl leading-relaxed">
+                            AI 시대의 조직 경쟁력은 고밀도 경량 운영체계에서 탄생합니다. 핵심을 선명히 쥐고, 일은 작게 쪼개어 빠르게 실행해야 합니다.
+                        </p>
+                    </div>
+                    <!-- Simplified and polished metadata card -->
+                    <div class="bg-white border border-slate-200/80 p-5 rounded-2xl w-full lg:w-72 text-xs space-y-2.5 shadow-sm text-slate-600 shrink-0">
+                        <p class="flex items-center gap-2"><strong class="text-slate-900 w-10 shrink-0">일시:</strong> 2026.05.29 (금) 13:00 ~ 18:00</p>
+                        <p class="flex items-center gap-2"><strong class="text-slate-900 w-10 shrink-0">장소:</strong> 아모리스 역삼</p>
+                        <p class="flex items-center gap-2"><strong class="text-slate-900 w-10 shrink-0">참석:</strong> @박상우 (kt cloud 인재육성TF)</p>
+                    </div>
+                </div>
+
+                <!-- Key Core Concept Card (Restored to image_75cee2.png style) -->
+                <div class="border border-slate-100 bg-white rounded-2xl p-6 shadow-sm relative overflow-hidden flex flex-col justify-center">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-600"></div>
+                    <h3 class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-2">KEY CORE CONCEPT</h3>
+                    <p class="text-[15px] sm:text-base font-bold text-slate-900 leading-relaxed">
+                        "AI 시대의 조직 경쟁력은 더 많은 사람과 더 복잡한 프로세스가 아니라, <span class="text-brand-600 underline decoration-2 decoration-brand-200">핵심은 선명하게 붙잡고, 일은 작게 쪼개고, 의사결정은 빠르게 하며, 고객 가치로 돈을 버는 고밀도 경량 운영체계</span>에서 나온다."
+                    </p>
+                </div>
+
+                <!-- 1. 행사 개요 & 키워드 -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Keywords Card -->
+                    <div class="lg:col-span-1 bg-white border border-slate-200 p-6 rounded-2xl space-y-4 shadow-sm">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-tags text-brand-500"></i> 핵심 영역 태그
+                        </h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-slate-100 hover:bg-brand-50 hover:text-brand-700 transition px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700">#경량조직</span>
+                            <span class="bg-slate-100 hover:bg-brand-50 hover:text-brand-700 transition px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700">#고밀도조직</span>
+                            <span class="bg-slate-100 hover:bg-brand-50 hover:text-brand-700 transition px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700">#AI전환 (AX)</span>
+                            <span class="bg-slate-100 hover:bg-brand-50 hover:text-brand-700 transition px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700">#일의재설계</span>
+                            <span class="bg-slate-100 hover:bg-brand-50 hover:text-brand-700 transition px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700">#채용설계</span>
+                            <span class="bg-slate-100 hover:bg-brand-50 hover:text-brand-700 transition px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700">#코어베이션</span>
+                            <span class="bg-slate-100 hover:bg-brand-50 hover:text-brand-700 transition px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700">#실행속도</span>
+                        </div>
+                        <div class="pt-4 border-t border-slate-100 space-y-2 text-xs text-slate-500">
+                            <p class="font-bold text-slate-700"><i class="fa-solid fa-bullseye text-brand-600 mr-1"></i> 참석 목적</p>
+                            <p class="leading-relaxed">AI 시대의 조직·채용·업무 시스템 변화 방향을 파악하고, kt cloud 인재육성 및 조직문화 관점의 최적 적용점을 도출하기 위함.</p>
+                        </div>
+                    </div>
+
+                    <!-- Time Table Summary -->
+                    <div class="lg:col-span-2 bg-white border border-slate-200 p-6 rounded-2xl space-y-4 shadow-sm">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-calendar-days text-accent-indigo"></i> 컨퍼런스 상세 타임 테이블 (13:00 - 18:00)
+                        </h4>
+                        <div class="relative pl-4 border-l-2 border-slate-100 space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 relative text-xs">
+                                <span class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-slate-300"></span>
+                                <span class="text-slate-400 font-bold shrink-0 w-24">13:00 - 13:10</span>
+                                <span class="text-slate-700 font-semibold">[오프닝]</span>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 relative text-xs">
+                                <span class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-slate-400"></span>
+                                <span class="text-slate-500 font-bold shrink-0 w-24">13:10 - 13:50</span>
+                                <span class="font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded shrink-0">아정당 김민기 대표</span>
+                                <span class="text-slate-800 font-medium">2,000억 대표가 깨달은 열심히 할수록 성과 안 나는 조직의 착각 3가지</span>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 relative text-xs">
+                                <span class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-indigo-500"></span>
+                                <span class="text-slate-500 font-bold shrink-0 w-24">14:20 - 15:20</span>
+                                <span class="font-bold bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded shrink-0">송길영 작가</span>
+                                <span class="text-slate-800 font-medium">세션 1. 시대예보: 경량문명의 탄생</span>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 relative text-xs">
+                                <span class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-emerald-500"></span>
+                                <span class="text-slate-500 font-bold shrink-0 w-24">15:40 - 16:40</span>
+                                <span class="font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded shrink-0">인터엑스 서재민 본부장</span>
+                                <span class="text-slate-800 font-medium">세션 2. 채용의 시대는 끝났다. 설계의 시대에 올라타라</span>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 relative text-xs">
+                                <span class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-rose-500"></span>
+                                <span class="text-slate-500 font-bold shrink-0 w-24">15:40 - 16:40</span>
+                                <span class="font-bold bg-rose-50 text-rose-700 px-2 py-0.5 rounded shrink-0">링글 이성파 공동대표</span>
+                                <span class="text-slate-800 font-medium">세션 3. 생산성 올리는 AI 활용 구조와 시스템 설계</span>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 relative text-xs">
+                                <span class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-amber-500"></span>
+                                <span class="text-slate-500 font-bold shrink-0 w-24">17:10 - 17:40</span>
+                                <span class="font-bold bg-amber-50 text-amber-700 px-2 py-0.5 rounded shrink-0">가인지 김경민 대표</span>
+                                <span class="text-slate-800 font-medium">세션 4. 중소기업에 실제로 적용되는 조직 운영 프레임워크</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. 전체 핵심 메시지 요약 (Restored to original version as requested) -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900 border-l-4 border-brand-500 pl-3">
+                        전체 핵심 메시지 요약
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Card 1: 속도 혁신 -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:shadow-lg transition duration-200">
+                            <span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-md">속도의 혁신</span>
+                            <h4 class="text-base font-bold text-slate-900 mt-3">경량 조직은 작은 조직이 아니라 '빠른 조직'이다</h4>
+                            <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                                결재, 지시, 상신, 참조, 협조처럼 속도를 늦추는 장치가 많을수록 조직은 무거워집니다. 규모의 안정성이 과거를 만들었다면, 현재는 규모가 의사결정의 비용이 됩니다.
+                            </p>
+                        </div>
+
+                        <!-- Card 2: 고밀도 전략 -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:shadow-lg transition duration-200">
+                            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">고밀도 전략</span>
+                            <h4 class="text-base font-bold text-slate-900 mt-3">경량화의 목적은 인원 축소가 아니라 '고밀도화'다</h4>
+                            <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                                핵심 철학, 자원, 생산, 유통, 고객이라는 핵심(Core)을 완벽히 잡고, 그 코어를 기반으로 가볍고 유연하게 인접 영역을 확장하는 형태의 조직을 의미합니다.
+                            </p>
+                        </div>
+
+                        <!-- Card 3: 구조 개편 -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:shadow-lg transition duration-200">
+                            <span class="text-xs font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md">구조 개편</span>
+                            <h4 class="text-base font-bold text-slate-900 mt-3">AI 도입 이전에 '일의 구조'를 다시 재설정해야 한다</h4>
+                            <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                                망가진 프로세스 위에 단순히 AI 솔루션만 얹게 되면, 예외 처리나 결과물의 기계 검증 부담만 커집니다. 일의 Step을 쪼개고 Input & Output 정의가 우선입니다.
+                            </p>
+                        </div>
+
+                        <!-- Card 4: 설계형 아키텍트 -->
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:shadow-lg transition duration-200">
+                            <span class="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">설계형 아키텍트</span>
+                            <h4 class="text-base font-bold text-slate-900 mt-3">채용은 단순 충원이 아닌 '비즈니스 조직 설계'다</h4>
+                            <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                                단순히 이력서를 걸러 전달하는 채용 대행자(Recruiter)에서 탈피해야 합니다. 사업전략을 역산해 역할을 정의하고 온보딩 후 성과까지 설계하는 파트너여야 합니다.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Card 5: 주도적 주체성 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 hover:shadow-lg transition duration-200">
+                        <span class="text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md">주도적 주체성</span>
+                        <h4 class="text-base font-bold text-slate-900 mt-3">개인도 조직도 "직접 하는 힘"과 "고객 가치 창출력"을 가져야 한다</h4>
+                        <p class="text-sm text-slate-600 mt-2 leading-relaxed font-normal">
+                            모든 세션을 관통하는 관점은 바로 "시키는 시대의 종료"입니다. 스스로 직접 구조를 설계하고 자기의 포트폴리오를 만들어낼 줄 알아야 생존할 수 있습니다. 동시에 무작정 독립하여 기능을 단순 판매하기보단, 비즈니스 맥락에서 고객 니즈를 이해하고 고객 주머니를 직접 열 가치를 창출하는 역량을 단련해야 합니다.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 3. 세션별 핵심 요약 매핑 -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900 border-l-4 border-brand-500 pl-3">
+                        세션별 핵심 요약 매핑
+                    </h3>
+                    <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm text-slate-600">
+                                <thead class="bg-slate-50 text-slate-700 font-bold text-xs uppercase border-b border-slate-200">
+                                    <tr>
+                                        <th class="p-4">시간 / 연사</th>
+                                        <th class="p-4">세션 주제</th>
+                                        <th class="p-4">핵심 요약 메시지</th>
+                                        <th class="p-4">적용 키워드</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <tr class="hover:bg-slate-50/50 transition">
+                                        <td class="p-4 font-semibold text-slate-950">14:20 - 15:20<br><span class="text-indigo-600 font-normal">송길영 작가</span></td>
+                                        <td class="p-4 font-bold text-slate-900">시대예보: 경량 문명의 탄생</td>
+                                        <td class="p-4 text-xs leading-relaxed">경량 문명은 빠른 문명이다. 결재와 관리 중심 조직은 정보의 실시간 경쟁에서 속도와 유연성 결핍으로 영구 탈락할 수밖에 없다.</td>
+                                        <td class="p-4">
+                                            <div class="flex flex-wrap gap-1">
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">결재 축소</span>
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">직접 실행</span>
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">포트폴리오</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/50 transition">
+                                        <td class="p-4 font-semibold text-slate-950">15:40 - 16:40<br><span class="text-emerald-600 font-normal">서재민 본부장</span></td>
+                                        <td class="p-4 font-bold text-slate-900">채용의 시대는 끝났다. 설계의 시대에 올라타라</td>
+                                        <td class="p-4 text-xs leading-relaxed">채용은 빈자리 머릿수를 메우는 게 아니라 사업전략-조직구조-역할설계의 연쇄체다. 서류와 면접 위주의 주관적 검증 대신 실무와 DNA를 완벽히 필터링한다.</td>
+                                        <td class="p-4">
+                                            <div class="flex flex-wrap gap-1">
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">TA 3.0</span>
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">스크린콜</span>
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">사전과제</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/50 transition">
+                                        <td class="p-4 font-semibold text-slate-950">15:40 - 16:40<br><span class="text-rose-600 font-normal">이성파 대표</span></td>
+                                        <td class="p-4 font-bold text-slate-900">생산성 올리는 AI 활용 구조와 시스템 설계</td>
+                                        <td class="p-4 text-xs leading-relaxed">AI 활용 전 일하는 방식의 프로세스 정상화가 필수다. 업무를 Step으로 완벽히 분할하고 Input, Output을 상호 정의해 두어야 자동화의 품질이 수렴한다.</td>
+                                        <td class="p-4">
+                                            <div class="flex flex-wrap gap-1">
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">I/O 정의</span>
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">검토 Agent</span>
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">스몰 스타트</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50/50 transition">
+                                        <td class="p-4 font-semibold text-slate-950">17:10 - 17:40<br><span class="text-amber-600 font-normal">김경민 대표</span></td>
+                                        <td class="p-4 font-bold text-slate-900">중소기업에 실제로 적용되는 조직 운영 프레임워크</td>
+                                        <td class="p-4 text-xs leading-relaxed">물리적 자산, 규모 경쟁을 멈추고 밀도로 경쟁해야 한다. 단단한 핵심인 Core를 보존한 채 인접 영역으로 확장하는 5가지 축의 코어베이션을 정립한다.</td>
+                                        <td class="p-4">
+                                            <div class="flex flex-wrap gap-1">
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">코어베이션</span>
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">2단계 결재</span>
+                                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded">3개월 목표</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. kt cloud 관점의 시사점 -->
+                <div class="bg-slate-900 text-white rounded-3xl p-6 lg:p-8 shadow-xl">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="text-brand-400 text-2xl"><i class="fa-solid fa-cloud"></i></span>
+                        <h3 class="text-xl font-bold">kt cloud 관점의 구체적 시사점</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-6 text-sm text-slate-300">
+                        <div class="border-b border-slate-800 pb-5">
+                            <span class="inline-block bg-brand-600 text-white font-bold px-2.5 py-1 rounded text-xs mb-2">1. 인재육성</span>
+                            <h4 class="font-bold text-white text-base">AI 교육보다 "일 재설계 훈련"이 먼저다</h4>
+                            <p class="mt-1 leading-relaxed text-slate-300">
+                                AI 툴 사용법(단순 프롬프트 조작법) 교육만으로는 실제 업무 가치를 극적으로 바꿀 수 없습니다. 구성원이 자신의 업무를 미시적인 Step 단위로 분석하여 쪼개고, 소요시간과 반복·병목구간을 가려내며, 투입/출력물의 명확한 검증 기준을 규격화하는 실질 업무 진단 훈련이 선행되어야 합니다.
+                            </p>
+                        </div>
+
+                        <div class="border-b border-slate-800 pb-5">
+                            <span class="inline-block bg-accent-indigo text-white font-bold px-2.5 py-1 rounded text-xs mb-2">2. 조직문화</span>
+                            <h4 class="font-bold text-white text-base">결재·보고·협조의 비즈니스적 목적을 선명히 재정의하라</h4>
+                            <p class="mt-1 leading-relaxed text-slate-300">
+                                무작정 관행을 없애기보단 각 절차가 존재하는 명확한 이유를 따져보아야 합니다. 단순 사실 확인 및 실무적 사안은 한두 단계 내의 간결한 수평 승인 혹은 로그 축적으로 완료하고, 리스크가 중차대한 의사결정에만 매니저 검토를 얹는 구조로 정비하여 실무진의 수동적 부담감을 제거해야 합니다.
+                            </p>
+                        </div>
+
+                        <div class="border-b border-slate-800 pb-5">
+                            <span class="inline-block bg-accent-emerald text-white font-bold px-2.5 py-1 rounded text-xs mb-2">3. 채용/온보딩</span>
+                            <h4 class="font-bold text-white text-base">역할 정의와 구체 성과 기대치를 입사 이전부터 연계하라</h4>
+                            <p class="mt-1 leading-relaxed text-slate-300">
+                                충원 위주의 채용에서 아키텍트형 채용으로의 전환을 단행해야 합니다. 채용 전 단계부터 입사 후 3개월간 이룩해야 할 명확한 목표, 6개월 뒤 실현되어야 할 기대 성과 가드를 패키지로 기획해 면접관과 임직원, 입사자가 한눈에 합치된 눈높이를 공유하도록 일치화합니다.
+                            </p>
+                        </div>
+
+                        <div class="border-b border-slate-800 pb-5">
+                            <span class="inline-block bg-accent-rose text-white font-bold px-2.5 py-1 rounded text-xs mb-2">4. 업무 시스템</span>
+                            <h4 class="font-bold text-white text-base">전사 단위의 자동화 구축보다 매핑된 스몰 병목 하나를 격파하라</h4>
+                            <p class="mt-1 leading-relaxed text-slate-300">
+                                AI나 자동화 프로젝트는 크고 무거운 시스템화로 시작할 시 엄청난 검증비용과 부적합 리스크를 낳습니다. 각 개별 파트에서 가장 많은 소요시간을 뺏는 확실한 원인 구간(Step)을 파악한 뒤, 마중물 형태의 스몰 이터레이션(프롬프트, 간편 연동)을 주 단위로 반복 보완해 나가는 것이 효과적입니다.
+                            </p>
+                        </div>
+
+                        <div>
+                            <span class="inline-block bg-accent-amber text-white font-bold px-2.5 py-1 rounded text-xs mb-2">5. 사업/조직 운영</span>
+                            <h4 class="font-bold text-white text-base">코어를 철저히 유지한 영리한 인접 확장 (코어베이션)</h4>
+                            <p class="mt-1 leading-relaxed text-slate-300">
+                                kt cloud가 가진 고유 자산(인프라 역량, 기술력, 풍부한 시니어 전문가 풀 등)을 망각한 채 외부 흐름에만 쏠린 무모한 방향 조정을 지양해야 합니다. 우리가 절대적으로 가진 강점을 인접 비즈니스 문제 및 신규 교육 연계 모델로 영리하게 가로질러 결합해 시너지를 취하는 게 안전한 도전을 촉진합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. 자가진단 및 바로 적용해볼 질문 -->
+                <div class="bg-white border border-slate-200 rounded-3xl p-6 lg:p-8 shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-list-check text-brand-600 mr-2"></i>조직 적용 자가진단 질문 목록</h3>
+                            <p class="text-xs text-slate-500 mt-1">우리 부서와 팀의 현주소를 진단해 보고, 체크가 안 된 항목들은 개선 우선순위로 관리해 보세요.</p>
+                        </div>
+                        <span class="text-xs bg-slate-100 px-3 py-1.5 rounded-full font-bold text-slate-700">7대 진단 축</span>
+                    </div>
+
+                    <div class="divide-y divide-slate-100">
+                        <label class="flex items-start gap-4 py-4 cursor-pointer hover:bg-slate-50 transition px-2 rounded-xl">
+                            <input type="checkbox" x-model="checkedQuestions['q1']" class="mt-1 h-4 w-4 text-brand-600 border-slate-300 rounded focus:ring-brand-500 shrink-0">
+                            <div>
+                                <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-700 mb-1">업무 재설계</span>
+                                <p class="text-sm font-semibold text-slate-800">우리 팀 업무 중 수작업이 가장 많고 시간이 가장 오래 걸리는 핵심 Step 하나를 명확히 집어내고 있나요?</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-4 py-4 cursor-pointer hover:bg-slate-50 transition px-2 rounded-xl">
+                            <input type="checkbox" x-model="checkedQuestions['q2']" class="mt-1 h-4 w-4 text-brand-600 border-slate-300 rounded focus:ring-brand-500 shrink-0">
+                            <div>
+                                <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 mb-1">자동화 준비</span>
+                                <p class="text-sm font-semibold text-slate-800">해당 Step의 투입값(Input)과 산출값(Output)이 매번 달라지지 않도록 엄격한 규격으로 매핑해 정의했나요?</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-4 py-4 cursor-pointer hover:bg-slate-50 transition px-2 rounded-xl">
+                            <input type="checkbox" x-model="checkedQuestions['q3']" class="mt-1 h-4 w-4 text-brand-600 border-slate-300 rounded focus:ring-brand-500 shrink-0">
+                            <div>
+                                <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded bg-rose-50 text-rose-700 mb-1">검증 기준</span>
+                                <p class="text-sm font-semibold text-slate-800">결과물이 사람 눈으로 봤을 때도 일관되게 "잘 완료되었다" 또는 "오류이다"를 판별할 명량한 감사 기준을 갖고 있나요?</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-4 py-4 cursor-pointer hover:bg-slate-50 transition px-2 rounded-xl">
+                            <input type="checkbox" x-model="checkedQuestions['q4']" class="mt-1 h-4 w-4 text-brand-600 border-slate-300 rounded focus:ring-brand-500 shrink-0">
+                            <div>
+                                <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 mb-1">조직 문화</span>
+                                <p class="text-sm font-semibold text-slate-800">단순한 상태 알림(로그) 수준의 사안과 실제 결재가 꼭 필요한 사안을 구분하여 결재 단계를 2인 이내로 좁히고 있나요?</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-4 py-4 cursor-pointer hover:bg-slate-50 transition px-2 rounded-xl">
+                            <input type="checkbox" x-model="checkedQuestions['q5']" class="mt-1 h-4 w-4 text-brand-600 border-slate-300 rounded focus:ring-brand-500 shrink-0">
+                            <div>
+                                <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700 mb-1">채용 역산</span>
+                                <p class="text-sm font-semibold text-slate-800">현재 계획 중인 포지션 충원은 단순히 전임자의 퇴사 공백 보충이 아닌, 비즈니스 전략에 기반해 역할을 다시 쪼갠 결과물인가요?</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-4 py-4 cursor-pointer hover:bg-slate-50 transition px-2 rounded-xl">
+                            <input type="checkbox" x-model="checkedQuestions['q6']" class="mt-1 h-4 w-4 text-brand-600 border-slate-300 rounded focus:ring-brand-500 shrink-0">
+                            <div>
+                                <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded bg-rose-50 text-rose-700 mb-1">코어 판별</span>
+                                <p class="text-sm font-semibold text-slate-800">우리 팀만의 핵심적인 킬러 자산(철학, 자원, 생산, 유통, 고객 중 하나)이 무엇인지 조직원들이 완벽히 인지하나요?</p>
+                            </div>
+                        </label>
+                        <label class="flex items-start gap-4 py-4 cursor-pointer hover:bg-slate-50 transition px-2 rounded-xl">
+                            <input type="checkbox" x-model="checkedQuestions['q7']" class="mt-1 h-4 w-4 text-brand-600 border-slate-300 rounded focus:ring-brand-500 shrink-0">
+                            <div>
+                                <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 mb-1">성과 관리</span>
+                                <p class="text-sm font-semibold text-slate-800">기존 연단위의 고착화된 KPI 평가가 아닌, 3개월 단위의 대담한 도전과 열린 피드백 주기로 구동되고 있나요?</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 6. 권장 후속 실행 액션 -->
+                <div class="space-y-6">
+                    <h3 class="text-lg font-bold text-slate-900 border-l-4 border-brand-500 pl-3">추천 후속 실행 액션</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                            <span class="w-7 h-7 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-sm">1</span>
+                            <h4 class="font-bold text-slate-900 text-sm">팀별 업무 Step 진단 워크숍</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                각 부서별로 수동 반복으로 매몰되어 있는 대표 업무 1개를 골라 담당자, 작업도구, 소요시간, I/O 구조, 검수 적격 기준을 격자형 템플릿에 직접 매핑하고 AX 도입 타당성을 사전에 도출합니다.
+                            </p>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                            <span class="w-7 h-7 rounded-full bg-accent-indigo/10 text-accent-indigo flex items-center justify-center font-bold text-sm">2</span>
+                            <h4 class="font-bold text-slate-900 text-sm">AI 자동화 스몰 스타트 시범 적용</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                완벽하고 거대한 시스템 설계의 꿈을 접고, 실행(Agent 1)과 검토(Agent 2) 프롬프트 구조가 상호 피드백하는 독립형 60점짜리 소형 튜닝 모델을 세팅하여 즉각적 업무 소요시간 단축 효능을 체험하게 만듭니다.
+                            </p>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                            <span class="w-7 h-7 rounded-full bg-accent-emerald/10 text-accent-emerald flex items-center justify-center font-bold text-sm">3</span>
+                            <h4 class="font-bold text-slate-900 text-sm">채용 요청서 템플릿 고도화</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                수동적 머릿수 메우기(TA 1.0)를 차단하기 위해, 채용 승인 요청 전 '사업 연결 목적, 3개월 내 구현 과제, 6개월 성과 타깃, 미채용 시 사업 리스크'를 사전에 필수로 논증하도록 시스템화합니다.
+                            </p>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                            <span class="w-7 h-7 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-sm">4</span>
+                            <h4 class="font-bold text-slate-900 text-sm">고밀도 조직 운영 체계 점검</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                전 임직원 결재선 전수 조사를 시행하여 불필요한 다단계 승인선을 2단계 수준으로 통합 가능성 여부를 타진하고, 연초 박제해 둔 연평균 KPI 체계를 수시 피드백이 가능한 3개월 목표 주기로 전환 실험합니다.
+                            </p>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3 md:col-span-2 lg:col-span-1">
+                            <span class="w-7 h-7 rounded-full bg-accent-amber/10 text-accent-amber flex items-center justify-center font-bold text-sm">5</span>
+                            <h4 class="font-bold text-slate-900 text-sm">사외 인사이트 기록의 전사 자산화</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                세미나, 컨퍼런스 참관을 다녀온 임직원들이 메모지에 흘려 쓰고 잊는 소멸성 기록들을 방지하기 위해, "우리 조직이 당장 실험해 볼 3가지 행동 질문"의 형식을 갖추어 공통 Wiki에 적재하는 루틴을 구현합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SECTION 1: 송길영 작가 상세 -->
+            <div x-show="activeTab === 'session1'" x-transition:enter="transition duration-150 ease-out" class="space-y-8">
+                
+                <div class="flex items-center gap-2">
+                    <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold">Session 1</span>
+                    <span class="text-slate-400">|</span>
+                    <span class="text-slate-600 text-xs font-medium"><i class="fa-solid fa-clock mr-1"></i> 14:20 - 15:20</span>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl lg:text-3xl font-extrabold text-slate-900">시대예보: 경량 문명의 탄생</h2>
+                    <p class="text-slate-500 font-medium text-sm mt-1">연사: 송길영 작가 (마인드 마이너)</p>
+                    <p class="text-xs text-slate-400 mt-2">참조 파일: NT-세션 1. 시대예🇧🇴_ 경량 문명의 탄생 - 송길영 작가-290526-130605.pdf</p>
+                </div>
+
+                <!-- Highlight Banner -->
+                <div class="border-l-4 border-accent-indigo bg-indigo-50/50 p-5 rounded-r-2xl">
+                    <h3 class="text-xs font-bold text-indigo-800 uppercase tracking-wider mb-1">핵심 연설 요지</h3>
+                    <p class="text-base font-bold text-indigo-950 leading-relaxed">
+                        "경량 문명은 물리적으로 가벼운 문명이 아닙니다. 바로 '빠른 문명'입니다. 과거에는 수직적인 대규모 대오와 복잡한 장치가 안정성을 담보했다면, 이제 실시간으로 벼려지는 정보망 속에서는 거대한 절차가 오히려 기회와 이익을 무참히 지연시키는 비효율이 됩니다."
+                    </p>
+                </div>
+
+                <!-- Detailed Reading -->
+                <div class="space-y-6 text-sm text-slate-700 leading-relaxed prose-custom">
+                    
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">1. 핵개인의 시대에서 경량 문명으로</h4>
+                        <p>
+                            2020년 이후 우리 사회는 전통적인 핵가족보다 더 파편화되고 기동성을 갖춘 '핵개인의 시대'로 본격 안착했습니다. 혼밥, 비대면 키오스크, 무인점포 등은 개인들이 굳이 불필요한 중간 중개자나 행정 점검 단계를 건너뛰고 자율적으로 일을 해결하게 만드는 막강한 관성을 주입했습니다.
+                        </p>
+                        <p>
+                            이 흐름은 기업의 보이지 않는 무거운 성문 안쪽까지 그대로 상륙했습니다. 과거처럼 보고 단계를 조율하거나 부서 간 타협점을 전달해 지시하는 '관리와 조정'의 영역은 실체 없이 증발하는 중입니다. 누군가에게 책임을 토스하거나 기안서에 주체적 판단 없이 도장만 얹는 관리형 직책자들의 실질 수명은 만기되었습니다. 각자가 '1인 단위 독립적 세포'가 되어 문제를 정의하고 직접 매만지는 능력만이 진정으로 대접받게 될 것입니다.
+                        </p>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">2. "시키는 일"의 시대가 끝나고 있다</h4>
+                        <p>
+                            단순히 소속된 간판이나 지위만으로 평생의 전문성을 자부할 수 없는 문명이 도래했습니다. 본인이 직접 손가락을 움직여 자신의 영역 내 산출물을 완성해 내고, 구조를 짜나가는 실질적 기여자여야만 존재할 수 있습니다. 
+                        </p>
+                        <blockquote class="bg-slate-50 border-l-4 border-indigo-400 pl-4 py-2 italic text-slate-600 font-medium my-4">
+                            " '아, 엑셀 정리는 밑에 김 대리 시켜두지 뭐' 라고 중얼거리는 순간, 그 리더는 최전방의 데이터 감각과 툴에 대한 제어력을 잃고 경량화 경선에서 즉시 퇴장 통보를 받게 되는 것과 마찬가지입니다."
+                        </blockquote>
+                        <p>
+                            리더든 주니어든 더 이상 타인에게 손발 노릇을 요구하는 채찍질형 감독이 되지 말고, 직접 완결해낼 줄 아는 1인 메이커가 되어야 합니다.
+                        </p>
+                    </div>
+
+                    <!-- Comparison Table -->
+                    <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                        <div class="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider"><i class="fa-solid fa-arrows-left-right text-brand-500 mr-1"></i> 문명의 이행 구도 비교</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-slate-600">
+                                <thead class="bg-slate-100 text-slate-700 font-bold uppercase border-b border-slate-200">
+                                    <tr>
+                                        <th class="p-4">축</th>
+                                        <th class="p-4 w-1/2">중량 문명 (과거의 문체)</th>
+                                        <th class="p-4 w-1/2">경량 문명 (미래의 문체)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <tr>
+                                        <td class="p-4 font-bold text-slate-900">핵심 기반</td>
+                                        <td class="p-4">유형의 대자산 (토지, 거대 장비, 공장, 막대한 고정 원자재)</td>
+                                        <td class="p-4 text-indigo-600 font-semibold">무형의 자산 (데이터, 특화 지식, 오토메이션, 독보적 IP)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-4 font-bold text-slate-900">조직 구조</td>
+                                        <td class="p-4">대인력 중심의 수직 피라미드, 엄격한 위계형 노무 공급</td>
+                                        <td class="p-4 text-indigo-600 font-semibold">자동화 시스템 중심, 소수 정예 직접 완결 네트워크</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-4 font-bold text-slate-900">속도 & 확장</td>
+                                        <td class="p-4">규모의 경제 기반 대량 생산, 느리지만 무거운 점유</td>
+                                        <td class="p-4 text-indigo-600 font-semibold">유연하고 극도로 빠른 시장 진입, 낮은 진입비용과 기민성</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">3. 경량 문명은 빠른 문명이다 (결재 축소)</h4>
+                        <p>
+                            송길영 작가는 <strong>"전문가는 절대 다른 사람의 결재를 목매어 기다리지 않는다"</strong>고 말하며 <strong>'의사의 실시간 처방'</strong>을 예로 들었습니다. 의사가 진료를 마치고 "결재를 득하고 처방하겠으니 기다리라"고 수뇌부에 사정하지 않는 것처럼, 실무자가 현장 데이터의 맥락을 쥐고 있다면 즉결 조치가 발동되어야 합니다.
+                        </p>
+                        <p>
+                            그는 또한 전통적인 <strong>'5일장'과 '5분 내 드론 즉시 배송'</strong>의 상상 초월 속도 격차를 비즈니스 가치 차이로 환기시켰습니다. 5일 단위의 묵직한 결재 승인을 기다리며 시간을 무력하게 살라먹는 오래된 대기업 조직은, 5분 안에 즉결 승인하고 개선을 얹어 발진시키는 극단의 경량 네이티브 기업들의 파고를 견뎌낼 수 없습니다. 속도를 늦추는 내부 협조선, 사후 추적 불가능한 소모성 회의 등 '단계의 장막'들을 허물어 뜨리는 것이 시작입니다.
+                        </p>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">4. 개인의 포트폴리오와 산출물이 중요해진다</h4>
+                        <p>
+                            조직이 더 이상 구성원의 긴 긴 인생을 온전히 보살펴줄 수 없고, 기대 수명은 비약적으로 연장되었습니다. 따라서 개인들은 소속된 명함의 타이틀보다 '외부에 즉각 보여줄 수 있는 본인만의 포트폴리오'와 '실체적 산출물'을 열망하게 됩니다.
+                        </p>
+                        <p>
+                            회사 안의 물웅덩이에만 고여 동료들의 평판만 주시하지 말고, 매주 바깥 생태계의 흐름과 소통하십시오. 세미나, 사외 커뮤니티, 타 부문 사람들을 조우해 얻은 생생한 현장 인사이트를 개인 노션이나 공용 Wiki(Confluence) 같은 기록 매체에 성실히 적재하십시오. 타인의 머리를 빌려 시킨 일 말고, 내가 내 손으로 직접 구현해낸 축적물이 곧 나만의 유일무이한 영혼이자 가치가 됩니다.
+                        </p>
+                    </div>
+
+                    <!-- Q&A Detail Summary Table -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base"><i class="fa-solid fa-clipboard-question text-indigo-500 mr-2"></i> 세션 현장 Q&A 상세 스크랩</h4>
+                        <div class="space-y-4 text-xs">
+                            <div class="p-4 bg-slate-50 rounded-xl">
+                                <p class="font-bold text-slate-900">Q. 구체적으로 나 개인의 삶에서 어떤 행동부터 가볍게 시작해야 할까요?</p>
+                                <p class="text-slate-600 mt-1">A. "자기 손발을 빌려 시키는 관리 버릇을 철저히 고치는 것입니다. 메일링, 일정 조율, 데이터 팩 수집 등 '지시하면 남이 알아서 주겠지' 하던 일들을 자신이 직접 인라인 기술과 지능형 에이전트(AI) 등을 동원해 바로 그 자리에서 다이렉트로 구현하는 모델을 손수 다뤄 가십시오."</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl">
+                                <p class="font-bold text-slate-900">Q. 기계화 문명에서 사람이 설 자리가 영구 축소되지 않을까요?</p>
+                                <p class="text-slate-600 mt-1">A. "단순 행정 지시 및 기능적인 엑셀 조립 등의 영역은 기계가 기하급수적으로 빨라집니다. 하지만 역설적으로 가치 판단력, 문제의 독창적 정의, 무엇을 왜 해야 하는지에 대한 추상적인 리더십의 중요성은 가치가 상향 조정됩니다."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Core Applied Points -->
+                    <div class="bg-indigo-900 text-white rounded-2xl p-6 space-y-4">
+                        <h4 class="font-bold text-base"><i class="fa-solid fa-lightbulb text-amber-400 mr-1.5"></i> kt cloud 적용 전략 블루프린트</h4>
+                        <ul class="space-y-3 text-xs text-slate-200">
+                            <li><strong class="text-white">결재와 보고의 전면 간소화:</strong> 수동 기안이나 사실 증명 수준의 상신을 전격 폐지하고, 전 영역에서 담당자 수평 즉결 권한 부여 혹은 사후 기록 로그 조회 방식으로 간결화 실험.</li>
+                            <li><strong class="text-white">외부 인텔리전스 공유 루틴:</strong> 교육 및 참관 참가자들이 메모를 전파력 있게 공개 Confluence에 업로드하여, 조직의 집단 무형 자산으로 기여하게 만드는 제도 보완.</li>
+                            <li><strong class="text-white">수강 위주에서 결과물(포트폴리오) 성과 체계 전환:</strong> 교육 이수증 위주의 육성 방식 대신, '실제 우리 팀 현안의 어떤 병목을 해결한 기록'을 개인의 산출 성과 카드로 인증.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SECTION 2: 서재민 본부장 상세 -->
+            <div x-show="activeTab === 'session2'" x-transition:enter="transition duration-150 ease-out" class="space-y-8">
+                
+                <div class="flex items-center gap-2">
+                    <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold">Session 2</span>
+                    <span class="text-slate-400">|</span>
+                    <span class="text-slate-600 text-xs font-medium"><i class="fa-solid fa-clock mr-1"></i> 15:40 - 16:40</span>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl lg:text-3xl font-extrabold text-slate-900">채용의 시대는 끝났다. 설계의 시대에 올라타라</h2>
+                    <p class="text-slate-500 font-medium text-sm mt-1">연사: 서재민 본부장 (인터엑스)</p>
+                    <p class="text-xs text-slate-400 mt-2">참조 파일: NT-세션 2. 채용의 시대는 끝났다. 설계의 시🇩🇦에 올라타라 - 인터엑스 서재민 본부장-290526-130610.pdf</p>
+                </div>
+
+                <!-- Highlight Banner -->
+                <div class="border-l-4 border-accent-emerald bg-emerald-50/50 p-5 rounded-r-2xl">
+                    <h3 class="text-xs font-bold text-emerald-800 uppercase tracking-wider mb-1">핵심 설계 요지</h3>
+                    <p class="text-base font-bold text-emerald-950 leading-relaxed">
+                        "채용 부서는 현업에서 급작스럽게 빈자리가 생길 때 이를 헐레벌떡 수급하여 인계를 맞춰주는 인력 공급 대행소가 아닙니다. 회사의 명확한 성장 목표에서 도출된 필수 역할을 정의해 내고, 온보딩의 성취 결과물과 성과까지 일직선으로 연쇄 매치해 내는 '전략적 아키텍트'입니다."
+                    </p>
+                </div>
+
+                <!-- Detailed Reading -->
+                <div class="space-y-6 text-sm text-slate-700 leading-relaxed prose-custom">
+                    
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">1. TA (Talent Acquisition) 진화 3단계 구도</h4>
+                        <p>
+                            우수한 조직일수록 인재 수급 활동을 단순한 전표 결재 및 이력서 가려내기로 대입하지 않습니다. TA 역할은 다음과 같이 세 가지 세대별 궤적으로 진화하고 있습니다.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/40 relative">
+                                <span class="bg-slate-200 text-slate-700 font-bold text-[9px] px-2 py-0.5 rounded uppercase">TA 1.0</span>
+                                <h5 class="font-bold text-slate-800 text-sm mt-2">Recruiter (실행 대행형)</h5>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">단순히 채용 채널 공고 게재 및 마크업을 하고, 올라온 이력서를 가공 없이 현업 팀에 전달하는 기능적 머릿수 보충 역할.</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/40 relative">
+                                <span class="bg-indigo-100 text-indigo-700 font-bold text-[9px] px-2 py-0.5 rounded uppercase">TA 2.0</span>
+                                <h5 class="font-bold text-slate-800 text-sm mt-2">Partner (현업 지원형)</h5>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">현업 팀 리더들과 요구 자격요건(JD)을 회의하며 이탈을 사전 방어하고 최신 노동 가용 수치에 기반하여 가이드와 제안을 공유함.</p>
+                            </div>
+                            <div class="p-4 rounded-xl border-2 border-accent-emerald bg-emerald-50/30 relative">
+                                <span class="bg-emerald-100 text-emerald-700 font-bold text-[9px] px-2 py-0.5 rounded uppercase">TA 3.0</span>
+                                <h5 class="font-bold text-emerald-800 text-sm mt-2">Architect (전략 설계형)</h5>
+                                <p class="text-xs text-slate-600 font-semibold mt-1 leading-relaxed">대표이사 및 사업 전략 수뇌부와 한 테이블에서 기민한 사업 전략을 수립하고, 그 성과를 내기 위해 당장 투입되어야 할 미지의 고유 직무 역할을 창안해 세팅하는 조율가.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">2. 채용은 조직 전략 회의에서 시작된다</h4>
+                        <p>
+                            인터엑스는 대표이사와 채용 아키텍트(TA 3.0)가 정례 회동을 하여 다음과 같은 4가지의 강도 높은 비즈니스 본위의 역산 질문을 바탕으로 인력을 확정 짓습니다.
+                        </p>
+                        <ul class="list-disc pl-5 space-y-2 text-xs text-slate-600">
+                            <li><strong class="text-slate-800">질문 1:</strong> 당사 비즈니스 로드맵 및 사업 전략을 완수하기 위해 지금 단계에서 필수로 전제되어야 할 미시 조직 구조와 포지션 배치는 정확히 무엇인가?</li>
+                            <li><strong class="text-slate-800">질문 2:</strong> 타겟 후보자가 조인하여 달성해야 할 구체적인 과업과 그로 인한 핵심 가치는 무엇인가?</li>
+                            <li><strong class="text-slate-800">질문 3:</strong> 이 역할이 사내에 적시에 투입되어야 하는 데드라인 시기는 언제인가?</li>
+                            <li><strong class="text-slate-800">질문 4:</strong> 채용이 예상 시기보다 소모적으로 지연될 시, 회사의 전술적 영업 이익 측면에서 어떤 치명적 디스어드밴티지나 기회 소멸 리스크가 초래되는가?</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">3. 구조화된 채용 검증체계</h4>
+                        <p>
+                            주관적 편견이나 면접관 기분에 따른 허점을 배제하기 위해 설계형 TA는 정밀하게 조율된 정량/정성식 하이웨이를 확보합니다.
+                        </p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex gap-4 p-3 bg-slate-50 rounded-xl">
+                                <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-2 py-1 rounded shrink-0 h-fit">15분 스크린콜</span>
+                                <p class="text-xs text-slate-600">
+                                    서류 합격 직후 약 15분간 가볍게 전화를 나누며 우리의 웅장한 사업 비전 방향성을 설득(셀링)하고 과제의 맥락을 논증합니다. 기대 처우 수준을 사전 합의함으로써 입사 막바지 조율 이탈 리스크를 예방하고 <strong>사전과제 제출률을 10%에서 60%대로 대폭 수렴</strong>시키는 대도약을 끌어냅니다.
+                                </p>
+                            </div>
+                            <div class="flex gap-4 p-3 bg-slate-50 rounded-xl">
+                                <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-2 py-1 rounded shrink-0 h-fit">실무 맥락 과제</span>
+                                <p class="text-xs text-slate-600">
+                                    후보자의 예전 훌륭했던 포장용 이력서 텍스트 검사에 매몰되지 않고, 부서에서 지금 실제 겪고 있는 아킬레스건급 상황을 간이 실무형 과제로 도출해 직접 다루게 하여 실제 돌파 경로를 판별합니다.
+                                </p>
+                            </div>
+                            <div class="flex gap-4 p-3 bg-slate-50 rounded-xl">
+                                <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-2 py-1 rounded shrink-0 h-fit">AI 분석서 탑재</span>
+                                <p class="text-xs text-slate-600">
+                                    면접 진입 이전에 후보자가 남긴 복수 글자와 역량 데이터를 AI가 정성 대조 진단하여 면접 준비 품질을 올리고 질문 포인트를 사전 명세화합니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">4. 가치 검증을 위한 DNA 필터링</h4>
+                        <p>
+                            실제 역량 중 세부 기술은 입사 이후 사내 전폭적인 전파 프로그램으로 빠르게 캐치업할 수 있으나, 마음속 깊숙이 굳어진 직무적 핵심가치는 절대로 교육으로 바꾸지 못합니다. 인터엑스는 이를 판독하기 위해 2대 DNA를 먼저 대입합니다.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-xl border border-slate-100 bg-slate-50/30">
+                                <h5 class="font-bold text-slate-900 text-xs flex items-center gap-1.5"><i class="fa-solid fa-graduation-cap text-emerald-500"></i> 강박적 호기심 (Obsessive Curiosity)</h5>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">스스로가 기술 변화(AI/ML 및 신규 오토메이션 툴의 흐름)에 본능적으로 밀착해 내밀하게 탐구하고 사내에 연쇄 실험해 보려는 진취적 학구열.</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-slate-100 bg-slate-50/30">
+                                <h5 class="font-bold text-slate-900 text-xs flex items-center gap-1.5"><i class="fa-solid fa-mountain-sun text-emerald-500"></i> 미래 낙관적 도전 (Optimistic Grit)</h5>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">미완이고 파악되지 않은 무성한 불확실 속에서도 무력해하지 않고, "앞으로 이 일은 반드시 내가 좋게 정상화해낼 수 있다"는 성장 마인드셋을 무기로 돌격하는 활력.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">5. 하이브리드 AX 파트너십 구축 및 입사-온보딩 동기화</h4>
+                        <p>
+                            인터엑스는 AI 전문 주니어 인력(Super Young Talent - 빠른 툴 응용 및 프로토타이핑 대가)과 사내 도메인 전문가 시니어(Sr. Talent)가 한 축으로 합치되는 '하이브리드 AX 구조'를 설계해 성공적으로 전사 AX를 견인 중입니다. 
+                        </p>
+                        <p>
+                            채용 단계에서 합격을 득하는 순간부터 사내에 이식되는 전주기적 온보딩은 시작됩니다. 입사 이전 날짜에 <strong>'미리 기대 목표(Role Card)'</strong>를 선발부서에서 발급하여 3개월 차의 도전 과제 성과와 6개월 최종 타깃을 상호 정립해 둠으로써 조기 탈락을 방어하고 유기적인 합치를 도출합니다.
+                        </p>
+                    </div>
+
+                    <!-- Applied point template checklist -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h5 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-file-invoice text-emerald-600 mr-1.5"></i> kt cloud 최적화 채용 의뢰 템플릿 변경안</h5>
+                        <div class="overflow-x-auto text-xs text-slate-600">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-800 font-bold border-b border-slate-200">
+                                        <th class="p-3">항목</th>
+                                        <th class="p-3">기존 양식 중심</th>
+                                        <th class="p-3 bg-emerald-50 text-emerald-900">도입 변경 설계안</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-800">의뢰 이유</td>
+                                        <td class="p-3 text-slate-400">"퇴사자 전임 공백 인원 1인 충원 요청"</td>
+                                        <td class="p-3 bg-emerald-50/20 font-medium text-emerald-950">"특정 비즈니스 타겟 실행에 부응할 미시 조직 역할 및 기여 목표"</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-800">자격 조건</td>
+                                        <td class="p-3 text-slate-400">"관련 연차 N년 이상, 해당 전공 학력 소지"</td>
+                                        <td class="p-3 bg-emerald-50/20 font-medium text-emerald-950">"강박적 호기심 증명 에피소드 및 실무형 사전과제 해결 타당성"</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-800">성과 마일스톤</td>
+                                        <td class="p-3 text-slate-400">"사내 직무 일반 규정 적용 평가"</td>
+                                        <td class="p-3 bg-emerald-50/20 font-medium text-emerald-950">"입사 즉시 3개월 목표, 6개월 달성 산출 성과 카드를 패키지로 확약"</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SECTION 3: 이성파 공동대표 상세 -->
+            <div x-show="activeTab === 'session3'" x-transition:enter="transition duration-150 ease-out" class="space-y-8">
+                
+                <div class="flex items-center gap-2">
+                    <span class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-xs font-bold">Session 3</span>
+                    <span class="text-slate-400">|</span>
+                    <span class="text-slate-600 text-xs font-medium"><i class="fa-solid fa-clock mr-1"></i> 15:40 - 16:40</span>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl lg:text-3xl font-extrabold text-slate-900">생산성 올리는 AI 활용 구조와 시스템 설계</h2>
+                    <p class="text-slate-500 font-medium text-sm mt-1">연사: 이성파 공동대표 (링글)</p>
+                    <p class="text-xs text-slate-400 mt-2">참조 파일: NT-세션 3. 생산성 올리는 AI 활용 구조와 시스템 설계 - 링글 이성ᄑ🇦 대표-290526-130615.pdf</p>
+                </div>
+
+                <!-- Highlight Banner -->
+                <div class="border-l-4 border-accent-rose bg-rose-50/50 p-5 rounded-r-2xl">
+                    <h3 class="text-xs font-bold text-rose-800 uppercase tracking-wider mb-1">핵심 설계 요지</h3>
+                    <p class="text-base font-bold text-rose-950 leading-relaxed">
+                        "솔루션 사서 전사에 결제해 나눠준다고 AX가 일어나진 않습니다. 망가진 채로 구르는 업무 흐름선 위에 덜컥 AI만 끼우면 정량 불일치와 오류 가공, 기계에 끌려다니는 담당자 이중 검수 부담감만 백배 가중됩니다. 모든 가치의 근본은 일을 Step으로 끊고, 투입물과 출력물의 양식을 규격화하는 '업무 정상화'입니다."
+                    </p>
+                </div>
+
+                <!-- Detailed Reading -->
+                <div class="space-y-6 text-sm text-slate-700 leading-relaxed prose-custom">
+                    
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">1. 망가진 프로세스 위에 무리하게 AI를 얹을 때</h4>
+                        <p>
+                            많은 기업 리더들이 조급함에 솔루션을 전사에 배포합니다. 하지만 일하는 플로우 자체의 기강이 헐거운 상태라면 대참사가 일어납니다. 링글이 제시한 3대 대표 부작용은 다음과 같습니다.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="p-4 bg-red-50/40 rounded-xl border border-red-100 space-y-1">
+                                <h5 class="font-bold text-red-900 text-xs flex items-center gap-1"><i class="fa-solid fa-explosion"></i> 1. 예외의 폭발</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">기준이나 구조가 엉망인 작업 지시 영역에 생성 AI를 무작정 끼우면, 기계가 매번 종잡을 수 없는 이상 예외 처리 값들을 대거 뿜어냅니다.</p>
+                            </div>
+                            <div class="p-4 bg-amber-50/40 rounded-xl border border-amber-100 space-y-1">
+                                <h5 class="font-bold text-amber-900 text-xs flex items-center gap-1"><i class="fa-solid fa-magnifying-glass"></i> 2. 이중 검증의 늪</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">출력 퀄리티를 신뢰하지 못하므로, 실무자가 기계가 만든 답안 전체를 한 자 한 자 다시 수작업 검토하느라 본래 업무 시간의 두 배를 살라먹습니다.</p>
+                            </div>
+                            <div class="p-4 bg-rose-50/40 rounded-xl border border-rose-100 space-y-1">
+                                <h5 class="font-bold text-rose-900 text-xs flex items-center gap-1"><i class="fa-solid fa-ban"></i> 3. 도입 확장의 실패</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">구성원들에게 단순 애물단지나 지겨운 점검 행위 하나가 추가된 것으로 낙인찍혀, 비싼 라이선스 구독 비용만 허공으로 증발해버립니다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Task Splitting Grid -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">2. 업무 세부 분할 기법 (회의록 정리 예시)</h4>
+                        <p>
+                            우선은 실무 흐름 전반을 엑스레이로 보듯 끊어야 합니다. 링글에서 공유한 회의록 구조의 분해 사례를 원문 그대로 시각화했습니다.
+                        </p>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-xs text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-800 font-bold border-b border-slate-200">
+                                        <th class="p-3">수행 단계 (Step)</th>
+                                        <th class="p-3">실제 담당자</th>
+                                        <th class="p-3">활용 도구</th>
+                                        <th class="p-3 text-center">소요 시간</th>
+                                        <th class="p-3 bg-rose-50 text-rose-900">AI 도입 판단</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-600">
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-900">Step 1. 회의 현장 녹음 작동</td>
+                                        <td class="p-3">회의 주최자</td>
+                                        <td class="p-3">모바일 디바이스 등</td>
+                                        <td class="p-3 text-center">0분</td>
+                                        <td class="p-3 bg-rose-50/10 text-slate-500">인간이 직접 간단 기동</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-900">Step 2. 녹음 파일 저장소 이송</td>
+                                        <td class="p-3">회의 주최자</td>
+                                        <td class="p-3">메신저/이메일</td>
+                                        <td class="p-3 text-center">5분</td>
+                                        <td class="p-3 bg-rose-50/10 text-slate-500">단순 자동화 트리거 영역</td>
+                                    </tr>
+                                    <tr class="bg-rose-50/20 text-rose-950 font-medium">
+                                        <td class="p-3 font-bold text-slate-900">Step 3. 수기 청취 내용 필기 및 속기 조립</td>
+                                        <td class="p-3">팀 내부 주니어</td>
+                                        <td class="p-3">노션/한글 수동 작성</td>
+                                        <td class="p-3 text-center font-bold text-amber-600">40분 이상</td>
+                                        <td class="p-3 bg-rose-100 text-rose-900 font-bold"><i class="fa-solid fa-star"></i> 최우선 AX 표적지</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-900">Step 4. 요약본 메일 및 슬랙 전송</td>
+                                        <td class="p-3">팀 내부 주니어</td>
+                                        <td class="p-3">이메일 클라이언트</td>
+                                        <td class="p-3 text-center">10분</td>
+                                        <td class="p-3 bg-rose-50/10 text-slate-500">단순 오토메이션 연결</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed mt-2">
+                            이렇게 미시적으로 자르면, 마구잡이로 "우리 회의 업무 전부를 기계로 바꿔줘" 가 아닌, 가장 많은 시간이 빨려 들어가는 <strong>'Step 3의 요약 및 전사 작업'</strong>에만 기술을 영리하게 탑재하는 국지적 전술이 보장됩니다.
+                        </p>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">3. AI를 얹기 전에 답해야 할 세 가지</h4>
+                        <p>
+                            아래의 세 개의 축에 완벽하게 확답을 할 수 없는 업무 단계라면, 어떠한 고기능 기술을 얹어도 붕괴합니다.
+                        </p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex gap-4 p-3.5 rounded-xl border border-slate-100">
+                                <span class="bg-rose-50 text-rose-700 font-bold text-xs px-2.5 py-1 rounded shrink-0 h-fit">1. 정상성 (Consistency)</span>
+                                <div>
+                                    <h5 class="text-xs font-bold text-slate-900">"사람이 매번 수행하더라도 최종 결과가 일관되게 규격 안으로 귀착되는가?"</h5>
+                                    <p class="text-xs text-slate-500 mt-1">사람도 매번 다르게 처리하는 일은 AI도 일관되고 안정적으로 처리하기 어렵습니다. 룰과 데이터 형식이 없는 상태이기 때문입니다.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 p-3.5 rounded-xl border border-slate-100">
+                                <span class="bg-rose-50 text-rose-700 font-bold text-xs px-2.5 py-1 rounded shrink-0 h-fit">2. 재현성 (Repeatability)</span>
+                                <div>
+                                    <h5 class="text-xs font-bold text-slate-900">"다음번에도 동일한 여정 구조와 양식으로 계속 반복 작동하는 일인가?"</h5>
+                                    <p class="text-xs text-slate-500 mt-1">오늘 한 번 반짝하고 영구 퇴출될 단발성 행사 기획 등의 과업은, 자동화 에너지를 투입해 가공할 경제적 가치 수렴 효과가 매우 부족합니다.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 p-3.5 rounded-xl border border-slate-100">
+                                <span class="bg-rose-50 text-rose-700 font-bold text-xs px-2.5 py-1 rounded shrink-0 h-fit">3. 측정성 (Measurability)</span>
+                                <div>
+                                    <h5 class="text-xs font-bold text-slate-900">"이 결과물이 정합성에 알맞게 잘 정돈되었는지 여부를 판단할 객관 기준이 확보되었는가?"</h5>
+                                    <p class="text-xs text-slate-500 mt-1">명확한 검증 체크리스트가 사전에 설계되어 있지 않다면, AI가 만든 답안 전체의 신뢰 가치를 인간이 판독하느라 이중 공수가 들어갑니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">4. 자동화는 원샷 완성이 아니라 정교화 수렴이다</h4>
+                        <p>
+                            첫 단추부터 100점 만점을 바라보는 것은 욕심입니다. 60점 수준의 조악한 1단계 오토메이션 경로를 일단열고, 그 후 지속적 조율을 통해 90점으로 끌어당겨 나갑니다.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center text-xs">
+                            <div class="p-3 rounded-xl border border-slate-200 bg-slate-50/50">
+                                <span class="font-bold text-slate-700">1단계</span>
+                                <h6 class="font-bold text-slate-900 mt-1">원시적 기계화</h6>
+                                <p class="text-[10px] text-slate-500 mt-1 leading-snug">사람이 파일을 업로드하면 AI가 조악하게 날것으로 변환, 사람이 통째 검토</p>
+                            </div>
+                            <div class="p-3 rounded-xl border border-slate-200 bg-slate-50/50">
+                                <span class="font-bold text-slate-700">2단계</span>
+                                <h6 class="font-bold text-slate-900 mt-1">프롬프트 튜닝</h6>
+                                <p class="text-[10px] text-slate-500 mt-1 leading-snug">실수나 어색한 구절이 나오는 예외 양식을 누적하여 지속적 지시 갱신 보완</p>
+                            </div>
+                            <div class="p-3 rounded-xl border border-rose-200 bg-rose-50/50">
+                                <span class="font-bold text-rose-800">3단계</span>
+                                <h6 class="font-bold text-rose-900 mt-1">평가 Agent 가동</h6>
+                                <p class="text-[10px] text-slate-600 mt-1 leading-snug">실행 Agent의 결과물을 별도 제2의 감사 프롬프트가 대조해 반려 지시</p>
+                            </div>
+                            <div class="p-3 rounded-xl border-2 border-brand-500 bg-brand-50">
+                                <span class="font-bold text-brand-700">4단계</span>
+                                <h6 class="font-bold text-brand-900 mt-1">완전 자동 안착</h6>
+                                <p class="text-[10px] text-slate-700 mt-1 leading-snug">사람의 판별 시각과 기계 평가의 판단도가 동등한 정밀 수준에 수렴</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Double loop visual structure -->
+                    <div class="bg-rose-50 border border-rose-200 rounded-2xl p-6 space-y-4">
+                        <h4 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-arrows-spin text-rose-600 mr-1"></i> 이중 에이전트 루프 (Double Agent Loop) 아키텍처</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            실무 주니어가 작성해 가져온 보고서 초안을 팀장이 매섭게 점검해 피드백하듯, AI도 실행 전담 기계(Agent 1)와 점검 전담 기계(Agent 2)가 상호 대조하며 피드백하는 이중 자가 루프를 구현해야 합니다.
+                        </p>
+                        
+                        <div class="flex flex-col md:flex-row items-center justify-center gap-6 pt-2">
+                            <div class="w-full md:w-56 bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                                <span class="bg-indigo-100 text-indigo-700 font-bold text-[9px] px-2 py-0.5 rounded uppercase">Agent 1: 실행 전담</span>
+                                <h5 class="font-bold text-slate-900 text-xs mt-2">지시 수행 에이전트</h5>
+                                <p class="text-[10px] text-slate-500 mt-1">회의 내용을 일차적인 일반 요약 초안 문서로 작성 및 출력</p>
+                            </div>
+                            <div class="flex flex-col items-center text-slate-400">
+                                <span class="text-[10px] font-bold text-brand-600"><i class="fa-solid fa-arrow-right"></i> 결과 전송</span>
+                                <div class="h-6 w-0.5 bg-slate-300 my-1 md:hidden"></div>
+                                <span class="text-[10px] font-bold text-rose-500"><i class="fa-solid fa-arrow-left"></i> 보완 및 재요청</span>
+                            </div>
+                            <div class="w-full md:w-56 bg-white p-4 rounded-xl border border-rose-300 shadow-sm text-center">
+                                <span class="bg-rose-500 text-white font-bold text-[9px] px-2 py-0.5 rounded uppercase">Agent 2: 검토 전담</span>
+                                <h5 class="font-bold text-slate-900 text-xs mt-2">품질 평가 에이전트</h5>
+                                <p class="text-[10px] text-slate-500 mt-1">사전 주입된 전사 보고 가이드 라인과 요소를 대조해 충족 여부 감사</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">5. AI 도입 이전에 DX(Digital Transformation)부터 정비하라</h4>
+                        <p>
+                            사무실에 슬랙을 깔았다고 당사 전사 DX가 완료된 것이 결코 아닙니다. 고유 가치 데이터와 사내 핵심 지식 아카이브가 부서별 로컬 드라이브나 누군가의 하드디스크에 파편적으로 파묻혀 있다면, 에이전트가 정상 가동하지 못하고 길을 잃습니다. 링글의 실천적 AX 발전 경로는 다음과 같습니다.
+                        </p>
+                        <ol class="list-decimal pl-5 space-y-2 text-xs text-slate-600">
+                            <li><strong class="text-slate-800">1단계 지식 집중화:</strong> 모든 사내 히스토리, 가이드라인, 산출물을 한곳의 데이터베이스(Wiki 등)에 중앙 집중 적재</li>
+                            <li><strong class="text-slate-800">2단계 프로세스 정상화:</strong> 각 Step의 R&R(역할), 인풋 형식, 아웃풋 규격 체크리스트를 선명히 기재</li>
+                            <li><strong class="text-slate-800">3단계 단순 오토메이션:</strong> 반복 작업을 간편 API 및 자동 연동 도구로 연결</li>
+                            <li><strong class="text-slate-800">4단계 AI 기획 탑재:</strong> 집중 정제된 데이터와 흐름도를 기반으로 특정 난관 Step을 최신 지능 에이전트로 교체</li>
+                        </ol>
+                    </div>
+
+                    <!-- Real World Case Card -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">6. 링글 내부 Product Line ID 매칭 성공 사례</h4>
+                        <p>
+                            실제 링글 비즈니스팀은 고객사(기업 인사팀)마다 날것으로 자유분방하게 적어 보내는 수많은 일차원 텍스트(예: "40분 6회", "주 1회 40분짜리 6번")를, 내부 관리용 정량 코드인 'Product Line ID'와 매치시키기 위해 사람이 엄청난 수작업 대조 시간을 투입하고 있었습니다.
+                        </p>
+                        <p>
+                            이 엉성했던 과정을 AI로 해결할 때 핵심은 툴 구매가 아니었습니다. <strong>"인사팀 엑셀 데이터(Input)를 받아 LLM 가공 처리를 돌린 뒤, 완벽한 단일 Product Line ID 값(Output)으로 귀착시킨다"</strong>는 입출력(I/O) 아키텍처를 선명히 정의했기 때문에 가능했던 성공이었습니다.
+                        </p>
+                        <p>
+                            리더가 직접 구석구석을 수사하듯 들여다보고, 옆에서 기획 구현자와 한 테이블에 달라붙어 루틴을 조율해 나간 결과, <strong>단 일주일 만에 기존 대비 80% 이상의 소요시간 감축</strong>이라는 엄청난 혁신을 완수해 냈습니다.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SECTION 4: 김경민 대표 상세 -->
+            <div x-show="activeTab === 'session4'" x-transition:enter="transition duration-150 ease-out" class="space-y-8">
+                
+                <div class="flex items-center gap-2">
+                    <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold">Session 4</span>
+                    <span class="text-slate-400">|</span>
+                    <span class="text-slate-600 text-xs font-medium"><i class="fa-solid fa-clock mr-1"></i> 17:10 - 17:40</span>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl lg:text-3xl font-extrabold text-slate-900">중소기업에 실제로 적용되는 조직 운영 프레임워크</h2>
+                    <p class="text-slate-500 font-medium text-sm mt-1">연사: 김경민 대표 (가인지컨설팅그룹)</p>
+                    <p class="text-xs text-slate-400 mt-2">참조 파일: NT-세션 4. 중소기업에 실제로 적용되는 조직 운영 프레임워크 - 가인지 김경민 대표-290526-130617.pdf</p>
+                </div>
+
+                <!-- Highlight Banner -->
+                <div class="border-l-4 border-accent-amber bg-amber-50/50 p-5 rounded-r-2xl">
+                    <h3 class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">핵심 설계 요지</h3>
+                    <p class="text-base font-bold text-amber-950 leading-relaxed">
+                        "안정된 대오를 던져버리고 외주 프리랜서처럼 조직을 잘게 찢어 얇게 벌리는 것은 건강한 경량조직이 아닙니다. 우리의 가장 확실한 주체 정체성이자 흔들리지 않는 가치인 핵심(Core)을 심해 깊숙이 굳건히 내려둔 채, 그 코어의 힘으로 가볍게 인접 영토를 탐색 확장해 나가는 '고밀도 코어베이션(Corebation)'이 정답입니다."
+                    </p>
+                </div>
+
+                <!-- Detailed Reading -->
+                <div class="space-y-6 text-sm text-slate-700 leading-relaxed prose-custom">
+                    
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">1. 경량 조직은 단순 프리랜서화가 아니다</h4>
+                        <p>
+                            최근 화두가 되는 경량 조직을 단순히 '사람 숫자를 기계적으로 깎아내거나, 정규직원을 쓰지 않고 플랫폼 외주 프리랜서 고용만으로 땜질하는 조직'으로 단편적으로 오인하면 큰 파국에 직면합니다.
+                        </p>
+                        <p>
+                            외주 인력에만 과도하게 위임하게 되면, 기획 중심 경쟁사 플랫폼에 종속되어 우리 고유의 자산 축적이 불가능해집니다. 경량 조직의 핵심은 <strong>분모(인원)만 깎는 게 아니라, 분자(1인당 창출 가치 밀도)를 극적으로 높이는 것</strong>입니다. 분모와 분자의 밀도가 꽉 들어차서 기동성 있게 움직이는 고밀도 조직을 지향해야 합니다.
+                        </p>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">2. 규모가 아니라 밀도의 경쟁이다</h4>
+                        <p>
+                            산업화 시대에는 으리으리한 강남 사옥 빌딩 크기, 사무실 평수, 연간 추가 충원된 임직원 수가 곧 위대한 성장의 훈장이었습니다. 하지만 오늘날 정보 문명에서는 1인당 생산성, 즉결 가능한 신속한 의사결정 속도, 고객 가치를 직접 창출하는 감각의 선명도가 모든 것을 결정합니다. 
+                        </p>
+                        <p>
+                            작고 연약하게 웅크려 있는 조직이 아니라, 규모는 콤팩트하지만 단위 면적당 가치 폭발력이 무서운 <strong>"밀도 높은 강소 조직"</strong>으로 사고 체계를 전향해야 합니다.
+                        </p>
+                    </div>
+
+                    <!-- Corebation 5 Axes Grid -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">3. 코어베이션(Corebation = Core + Innovation)의 5대 축</h4>
+                        <p>
+                            우리의 위대한 강점이 뿌리내린 터전을 망각하고 완전히 이질적인 영토에 무거운 자본을 신규 투하해 배를 대는 모험 대신, 우리가 가장 독점적으로 쥐고 있는 코어 가치로부터 나선형 혁신을 그려야 합니다.
+                        </p>
+                        
+                        <div class="overflow-x-auto text-xs text-slate-600">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-800 font-bold border-b border-slate-200">
+                                        <th class="p-3">성장 축</th>
+                                        <th class="p-3">근원적인 핵심 의문</th>
+                                        <th class="p-3">대표 혁신 사례 및 의미</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-slate-700">
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-900">철학 (Philosophy)</td>
+                                        <td class="p-3">고객이 단순히 상품 스펙 비교가 아닌, 우리 브랜드의 영혼에 팬덤처럼 정서적 열광을 일으킬 가치가 있는가?</td>
+                                        <td class="p-3 text-slate-600"><strong>발뮤다/파타고니아:</strong> 감성적 가치와 강력한 환경 철학이 신규 서비스와 카테고리를 무한 확장하는 흔들림 없는 다리가 됨.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-900">자원 (Resource)</td>
+                                        <td class="p-3">세상 누구도 모방이 불가한 우리 조직 고유의 지식, IP, 독자 가공 원천 소재 기술을 쥐고 있는가?</td>
+                                        <td class="p-3 text-slate-600">기 보유한 강력한 기반 IP와 데이터를 훼손하지 않고 가공만 달리하여 인접 가치 사슬 영역으로 전폭 유도.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-900">생산 (Production)</td>
+                                        <td class="p-3">단순 반복 행정, 노동, 기초 실행 공정을 AI와 시스템으로 대체하고 있는가?</td>
+                                        <td class="p-3 text-slate-600">생산 방식 자체를 무기로 승화시켜 타사 대비 압도적인 가격 우위나 전달 신뢰도를 구축.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-900">유통 (Distribution)</td>
+                                        <td class="p-3">고객이 조우하는 유통 채널 경로와 반응 데이터의 흐름을 직접 거머쥐고 유연히 통제하는가?</td>
+                                        <td class="p-3 text-slate-600"><strong>와비파커/무신사/올리브영:</strong> 기존 유통 마진의 극심한 낭비와 마찰을 영리하게 가로질러 직접 소유 및 개선.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-900">고객 (Customer)</td>
+                                        <td class="p-3">우리가 내미는 다음 솔루션과 가치를 눈감고도 열렬히 기다리고 신뢰할 충성 유저 집단이 확보되었는가?</td>
+                                        <td class="p-3 text-slate-600"><strong>디커플링/리멤버/대학내일:</strong> 이미 좁고 깊게 관통하여 끈끈해진 충성 고객의 여정선을 따라서 유관 서비스를 연쇄 결합.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">4. 대표적 코어베이션 실천 양식</h4>
+                        <p>
+                            가인지컨설팅에서 분석한 대표적 실전 양식은 크게 세 범주로 정돈됩니다.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-slate-50 rounded-xl">
+                                <h5 class="font-bold text-slate-900 text-xs">A. 철학 기반 (발뮤다, 파타고니아)</h5>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">단순 전기 전자기기 스펙 경쟁을 훌쩍 넘겨 '경험 감수성의 가치'를 관철시키고, 중고 거래 시장과 환경 운동 등 강력한 메시지를 필두로 사업 확장의 엄밀한 수평 기준선을 획정함.</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl">
+                                <h5 class="font-bold text-slate-900 text-xs">B. 유통 채널 기반 (무신사 스탠다드, 올리브영)</h5>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">온라인 독립 브랜드들의 진입 마찰을 줄이고, 오프라인 직접 경험 기회를 장악해 고객과 마주하는 가장 빠른 채널을 지배하여 시장 주도권을 회수함.</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl">
+                                <h5 class="font-bold text-slate-900 text-xs">C. 기존 고객 기반 (리멤버, 대학내일, 아정당)</h5>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">특정 유저군(명함 관리 전문가, 트렌디한 MZ세대 등)의 여정 속으로 밀착해 들어가, 그들의 고유 문제를 완전히 해결해 주며 다음 제품과 서비스로 신뢰를 타고 넘어감.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm">
+                        <h4 class="font-bold text-slate-900 text-base">5. 조직 수술을 위한 3대 제언</h4>
+                        <p>
+                            김경민 대표는 실제 현업에 당장 전조등을 켜듯 대입해야 할 세 가지 명징한 결단 사항을 던졌습니다.
+                        </p>
+                        <div class="space-y-3 text-xs text-slate-600">
+                            <p class="leading-relaxed">
+                                <strong class="text-slate-900 text-sm">1) 결재 단계의 절대적 단축 (2인 이하 원칙)</strong><br>
+                                "가인지컨설팅그룹의 내부 제1원칙은 '결재선에 2명 이상 태우지 않는다' 입니다." 품질이나 규제 점검을 위해 부득이한 경우 3단계를 고려할 순 있겠으나, 보고서 승인 라인이 비대해질수록 실무진은 책임 회피와 수동적 허드렛일 느낌에 기여 의욕을 완전히 잃고 주저앉습니다.
+                            </p>
+                            <p class="leading-relaxed">
+                                <strong class="text-slate-900 text-sm">2) 연간 KPI 평가를 즉시 버리고 3개월 도전 주기를 작동하라</strong><br>
+                                연초에 굳어버린 KPI 제도는 임직원들로 하여금 '어차피 변동될 수치를 수비적으로 방어해 점수나 챙기는 사일로 현상'을 유도합니다. 3개월 주기의 단기 마일스톤과 피드백 루틴만이 기민한 AX 시도와 주체적인 도전 에너지를 사내에 보장합니다.
+                            </p>
+                            <p class="leading-relaxed">
+                                <strong class="text-slate-900 text-sm">3) 고객 가치를 만들기 전의 성급한 독립은 파멸이다</strong><br>
+                                개인이 파편화되는 시대라고 하여 가벼운 일차적 기술만 갖고 조급히 독립하는 것은 위험합니다. 비즈니스 기획 안에서 고객이 진짜 원하는 가치가 무엇인지 현장 조율해 내고 주머니를 기꺼이 열게 만드는 종합 훈련이 조직이라는 소중한 요람 내에서 우선 축적되어야 합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-12 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 space-y-3">
+            <p class="font-medium text-slate-300">© 2026 kt cloud 인재육성TF 박상우 작성. All Rights Reserved.</p>
+            <p class="leading-relaxed text-slate-500 max-w-xl mx-auto">
+                본 문서는 가인지 컨퍼런스 당일 배포된 핵심 스크랩 자료 및 세션별 4개 원본 PDF 기록을 일체 생략 없이 집요하게 디지털 매핑하여 조립한 보존용 프리미엄 웹 리포트입니다.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>
